@@ -17,7 +17,7 @@ class Dividends:
             rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month)] 
             print('Total: R$ ', rows['Valor líquido'].sum())
         else:
-            print(f"'Ano' or 'Mês' column not found in DataFrame.")
+            print(f"'Year' or 'Month' column not found in DataFrame.")
 
     def resumeProduct(self):
         try:
