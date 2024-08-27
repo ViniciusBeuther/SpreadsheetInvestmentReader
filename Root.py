@@ -1,7 +1,7 @@
 from Wallet import Wallet
 
-transactionFile = '../assets/Negociações.xlsx'
-dividendTransactions = '../assets/Dividendos Recebidos.xlsx'
+transactionFile = '../src/assets/Negociações.xlsx'
+dividendTransactions = '../src/assets/Dividendos Recebidos.xlsx'
 
 wallet = Wallet(transactionFile, dividendTransactions)
 #wallet.initialize()
