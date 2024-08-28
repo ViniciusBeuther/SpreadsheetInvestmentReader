@@ -1,7 +1,8 @@
 from Wallet import Wallet
+from GlobalFunctions import chooseMonth
 
-transactionFile = '../src/assets/Negociações.xlsx'
-dividendTransactions = '../src/assets/Dividendos Recebidos.xlsx'
+transactionFile = '../assets/Negociações.xlsx'
+dividendTransactions = '../assets/Dividendos Recebidos.xlsx'
 
 wallet = Wallet(transactionFile, dividendTransactions)
 #wallet.initialize()
@@ -10,8 +11,9 @@ while True:
     print('=-=-=-=-=-=-=-=-=-= CENTRAL DE INVESTIMENTOS =-=-=-=-=-=-=-=-=-=')
     print('1- Ver carteira')
     print('2- Ver total investido')
-    print('3- Ver dividendos')
-    print('4- Ver dividendos do mês')
+    print('3- Ver dividendos totais')
+    print('4- Ver dividendos de um mês específico')
+    print('5- Ver rentabilidade mensal')
     print('9- Sair')
 
     option = int(input('Opção Desejada: '))
@@ -33,7 +35,22 @@ while True:
         print(wallet.getDividends())
 
     elif option == 4:
-        wallet.dividends.getDividendFromYearAndMonth(5, 2024)
+        months = ['1-Janeiro', '2-Fevereiro', '3-Março', '4-Abril', '5-Maio', '6-Junho', '7-Julho', '8-Agosto', '9-Setembro', '10-Outubro', '11-Novembro', '12-Dezembro']
+        
+        print('=-=-=-=-=-=-=-=-=-= MESES =-=-=-=-=-=-=-=-=-=')
+        # display all months as option
+        for month in months:
+            print(month)
+        #call a function to get the month selected
+        monthSelected = chooseMonth()
+        
+        try:
+            wallet.dividends.getDividendFromYearAndMonth(monthSelected, 2024)
+        except Exception as e:
+            print('Erro: Algo deu errado.')
+
+    elif option == 5:
+        pass
 
     else:
         print('Opção Inválida')
