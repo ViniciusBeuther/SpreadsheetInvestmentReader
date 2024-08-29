@@ -13,7 +13,8 @@ while True:
     print('2- Ver total investido')
     print('3- Ver dividendos totais')
     print('4- Ver dividendos de um mês específico')
-    print('5- Ver rentabilidade mensal')
+    print('5- Ver rentabilidade do mês atual')
+    print('6- Ver rentabilidade de um mês específico')
     print('9- Sair')
 
     option = int(input('Opção Desejada: '))
@@ -50,7 +51,19 @@ while True:
             print('Erro: Algo deu errado.')
 
     elif option == 5:
-        pass
+        wallet.getMonthlyProfitability(None, 2024)
+    
+    elif option == 6:
+        months = ['1-Janeiro', '2-Fevereiro', '3-Março', '4-Abril', '5-Maio', '6-Junho', '7-Julho', '8-Agosto', '9-Setembro', '10-Outubro', '11-Novembro', '12-Dezembro']
+        
+        print('=-=-=-=-=-=-=-=-=-= MESES =-=-=-=-=-=-=-=-=-=')
+        # display all months as option
+        for month in months:
+            print(month)
+        #call a function to get the month selected
+        monthSelected = chooseMonth()
+
+        wallet.getMonthlyProfitability(monthSelected, 2024)
 
     else:
         print('Opção Inválida')
