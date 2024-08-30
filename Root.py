@@ -1,8 +1,8 @@
 from Wallet import Wallet
 from GlobalFunctions import chooseMonth
 
-transactionFile = '../assets/Negociações.xlsx'
-dividendTransactions = '../assets/Dividendos Recebidos.xlsx'
+transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets//Negociações.xlsx'
+dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
 
 wallet = Wallet(transactionFile, dividendTransactions)
 #wallet.initialize()
@@ -50,6 +50,7 @@ while True:
             print('Erro: Algo deu errado.')
 
     elif option == 5:
+        wallet.calculateAmountAppliedUpToDate(2,2024)
         pass
 
     else:
