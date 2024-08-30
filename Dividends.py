@@ -1,7 +1,6 @@
 import pandas as pd
 
 class Dividends:
-    monthlyProfitability = None
     excel = None
     def __init__(self, dividendTransactions):
         self.initialize(dividendTransactions)
@@ -28,18 +27,3 @@ class Dividends:
         
         except Exception as e:
             return print('Error: Resuming codes. Check Dividends Class')
-        
-    def getMonthlyProfitability(self, month, year, totalApplied):
-        try:
-            if 'Ano' in self.excel.columns and 'Mês' in self.excel.columns:
-                rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month)] 
-                self.monthlyProfitability = rows['Valor líquido'].sum()
-                
-                profitabilityPercentage = (self.monthlyProfitability * 100) / totalApplied
-                return profitabilityPercentage
-
-            else:
-                print(f"'Year' or 'Month' not found in DataFrame.")
-
-        except Exception as e:
-            return print('Error: cannot calculate the monthly profitability.')

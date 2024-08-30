@@ -1,13 +1,11 @@
 import pandas as pd
 from Dividends import Dividends
-from datetime import date
 
 class Wallet:
     df = None
     investment_df = None
     dividends = None
     total = None
-    monthlyProfitability = None
 
     def __init__(self, transactionFile, dividendTransactions):
         self.df = pd.read_excel(transactionFile)
@@ -26,75 +24,7 @@ class Wallet:
         return self.total
     
     def getDividends(self):
-        return self.dividends.getDf()  
-    
-    def calculateTotalAppliedInMonth(self, month, year):
-        try:
-            # convert columns to numbers, if there aren't
-            self.df['Ano'] = self.df['Ano'].astype(int)
-            self.df['Mês'] = self.df['Mês'].astype(int)
-
-            # filter transactions up to the specified month/year
-            filtered_df = self.df[(self.df['Ano'] < year) | 
-                                ((self.df['Ano'] == year) & (self.df['Mês'] <= month))]
-
-            # save all sold/bought transacctions up to the specified
-            sold = filtered_df[filtered_df['Tipo de Movimentação'] == 'Venda']
-            bought = filtered_df[filtered_df['Tipo de Movimentação'] == 'Compra']
-
-            # group by negotiation code, summing quantity and price
-            soldGrouped = sold.groupby('Código de Negociação')[['Quantidade', 'Valor']].sum().reset_index()
-            boughtGrouped = bought.groupby('Código de Negociação')[['Quantidade', 'Valor']].sum().reset_index()
-
-            # calculate avg price for sell/buy
-            avg = (boughtGrouped['Valor'] / boughtGrouped['Quantidade']).round(2)
-            avgSold = (soldGrouped['Valor'] / soldGrouped['Quantidade']).round(2)
-
-            # Inser individual avg price in both df
-            boughtGrouped['Preço Médio'] = avg
-            soldGrouped['Preço Médio'] = avgSold
-
-            # merge both df to secure itself to have all the negotiation codes included
-            self.investment_df = pd.merge(boughtGrouped, soldGrouped, on='Código de Negociação', how='outer', suffixes=('_buy', '_sell'))
-
-            # replace NaN with 0
-            self.investment_df.fillna(0, inplace=True)
-
-            # calculate quantity and value
-            self.investment_df['Quantidade'] = self.investment_df['Quantidade_buy'] - self.investment_df['Quantidade_sell']
-            self.investment_df['Valor'] = self.investment_df['Valor_buy'] - self.investment_df['Valor_sell']
-            self.investment_df['Preço Médio'] = self.investment_df['Preço Médio_buy']
-
-            # Remove not necessary columns
-            self.investment_df = self.investment_df[self.investment_df['Quantidade'] != 0]
-            self.investment_df = self.investment_df[['Código de Negociação', 'Quantidade', 'Valor', 'Preço Médio']]
-
-            # calculate the total value invested up to the specified month/year
-            return self.investment_df['Valor'].sum()
-
-        except Exception as e:
-            print(f'Erro: Não foi possível calcular o patrimônio. {e}')
-
-
-    def getMonthlyProfitability(self, month, year):  
-        try:
-            if month == None:
-                # get today's date
-                today = date.today()
-                # call a function to calculate the total applied
-                totalAppliedUpToSpecifiedMonth = self.calculateTotalAppliedInMonth(month, year)
-                
-                # call the function to calculate the monthly profitability in Dividends class
-                self.monthlyProfitability = self.dividends.getMonthlyProfitability(today.day, today.year, totalAppliedUpToSpecifiedMonth)
-            elif type(month) is int or type(month) is float:
-                self.monthlyProfitability = self.dividends.getMonthlyProfitability(month, year, self.total)
-            else:
-                raise Exception('Error: invalid type of month and getting todays date.')
-            
-            return print(f'Rentabilidade mensal: {self.monthlyProfitability.round(3)} %')
-            
-        except Exception as e:
-            return print('Error: cannot calculate the monthly profitability.')
+        return self.dividends.getDf()
 
     def calculateAmount(self):
         try:
