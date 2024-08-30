@@ -10,12 +10,12 @@ class Wallet:
     monthlyProfitability = None
 
     def __init__(self, transactionFile, dividendTransactions):
-        self.initialize(dividendTransactions, transactionFile)
+        self.df = pd.read_excel(transactionFile)
         self.investment_df = self.calculateAmount()
         self.total = 0.00
+        self.initialize(dividendTransactions)
     
-    def initialize(self, dividendTransactions, transactionFile):
-        self.df = pd.read_excel(transactionFile)
+    def initialize(self, dividendTransactions):
         self.calculateAmount()
         self.dividends = Dividends(dividendTransactions)
 
@@ -33,7 +33,7 @@ class Wallet:
             # convert columns to numbers, if there aren't
             self.df['Ano'] = self.df['Ano'].astype(int)
             self.df['Mês'] = self.df['Mês'].astype(int)
-            print(self.df)
+
             # filter transactions up to the specified month/year
             filtered_df = self.df[(self.df['Ano'] < year) | 
                                 ((self.df['Ano'] == year) & (self.df['Mês'] <= month))]
@@ -50,7 +50,7 @@ class Wallet:
             avg = (boughtGrouped['Valor'] / boughtGrouped['Quantidade']).round(2)
             avgSold = (soldGrouped['Valor'] / soldGrouped['Quantidade']).round(2)
 
-            # Insert individual avg price in both df
+            # Inser individual avg price in both df
             boughtGrouped['Preço Médio'] = avg
             soldGrouped['Preço Médio'] = avgSold
 
@@ -62,9 +62,7 @@ class Wallet:
 
             # calculate quantity and value
             self.investment_df['Quantidade'] = self.investment_df['Quantidade_buy'] - self.investment_df['Quantidade_sell']
-
             self.investment_df['Valor'] = self.investment_df['Valor_buy'] - self.investment_df['Valor_sell']
-
             self.investment_df['Preço Médio'] = self.investment_df['Preço Médio_buy']
 
             # Remove not necessary columns
@@ -80,13 +78,18 @@ class Wallet:
 
     def getMonthlyProfitability(self, month, year):  
         try:
-            # get today's date
-            today = date.today()
-            # call a function to calculate the total applied
-            totalAppliedUpToSpecifiedMonth = self.calculateTotalAppliedInMonth(month, year)
-            print(totalAppliedUpToSpecifiedMonth)
-            # call the function to calculate the monthly profitability in Dividends class
-            self.monthlyProfitability = self.dividends.getMonthlyProfitability(today.day, today.year, totalAppliedUpToSpecifiedMonth)
+            if month == None:
+                # get today's date
+                today = date.today()
+                # call a function to calculate the total applied
+                totalAppliedUpToSpecifiedMonth = self.calculateTotalAppliedInMonth(month, year)
+                
+                # call the function to calculate the monthly profitability in Dividends class
+                self.monthlyProfitability = self.dividends.getMonthlyProfitability(today.day, today.year, totalAppliedUpToSpecifiedMonth)
+            elif type(month) is int or type(month) is float:
+                self.monthlyProfitability = self.dividends.getMonthlyProfitability(month, year, self.total)
+            else:
+                raise Exception('Error: invalid type of month and getting todays date.')
             
             return print(f'Rentabilidade mensal: {self.monthlyProfitability.round(3)} %')
             
