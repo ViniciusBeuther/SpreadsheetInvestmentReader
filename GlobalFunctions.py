@@ -1,6 +1,15 @@
 def chooseMonth():
-    monthSelected = int(input('Qual mês você deseja:'))
-    if monthSelected == 1:
+    months = ['1-Janeiro', '2-Fevereiro', '3-Março', '4-Abril', '5-Maio', '6-Junho', '7-Julho', '8-Agosto', '9-Setembro', '10-Outubro', '11-Novembro', '12-Dezembro']
+
+    print('=-=-=-=-=-=-=-=-=-= MESES =-=-=-=-=-=-=-=-=-=')
+    # display all months as option
+    for month in months:
+        print(month)
+    
+    monthSelected = int(input('Qual mês você deseja (0 para sair):'))
+    if monthSelected == 0:
+        return 0
+    elif monthSelected == 1:
         return 1
     elif monthSelected == 2:
         return 2

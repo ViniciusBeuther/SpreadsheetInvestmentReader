@@ -1,5 +1,5 @@
 from Wallet import Wallet
-from GlobalFunctions import chooseMonth
+from GlobalFunctions import chooseMonth, clearTerminal
 
 transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets//Negociações.xlsx'
 dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
@@ -22,25 +22,25 @@ while True:
         break
 
     elif option == 1:
+        clearTerminal()
         print('=-=-=-=-=-=-=-=-=-= CARTEIRA DE INVESTIMENTOS =-=-=-=-=-=-=-=-=-=')
         print(wallet.getInvestmentDf())
         print('\n\n')
     
     elif option == 2:
+        clearTerminal()
         print('=-=-=-=-=-=-=-=-=-= PATRIMÔNIO =-=-=-=-=-=-=-=-=-=')
         print('TOTAL INVESTIDO: R$ ', wallet.getTotal())
+        print('DIVIDENDOS RECEBIDOS: R$ ', wallet.getDividends())
         print('\n')
 
     elif option == 3:
+        clearTerminal()
         print(wallet.getDividends())
 
     elif option == 4:
-        months = ['1-Janeiro', '2-Fevereiro', '3-Março', '4-Abril', '5-Maio', '6-Junho', '7-Julho', '8-Agosto', '9-Setembro', '10-Outubro', '11-Novembro', '12-Dezembro']
-        
-        print('=-=-=-=-=-=-=-=-=-= MESES =-=-=-=-=-=-=-=-=-=')
-        # display all months as option
-        for month in months:
-            print(month)
+        clearTerminal()
+
         #call a function to get the month selected
         monthSelected = chooseMonth()
         
@@ -50,8 +50,19 @@ while True:
             print('Erro: Algo deu errado.')
 
     elif option == 5:
-        wallet.calculateAmountAppliedUpToDate(2,2024)
-        pass
+        clearTerminal()
+        currentYear = 2024
+        while True:
+            monthSelected = chooseMonth()
+            if monthSelected == 0:
+                break
+            else:
+                totalUpToSelectedMonth = wallet.calculateAmountAppliedUpToDate(monthSelected, currentYear)
+                dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
+
+                print(f'Rendimento de {monthSelected}: { (totalUpToSelectedMonth / dividendsReceiptInMonthSelected).round(2)}')
+                break
+
 
     else:
         print('Opção Inválida')

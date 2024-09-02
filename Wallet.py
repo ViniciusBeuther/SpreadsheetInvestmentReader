@@ -24,7 +24,7 @@ class Wallet:
         return self.total
     
     def getDividends(self):
-        return self.dividends.getDf()
+        return self.dividends.getTotalDividends()
 
     def calculateAmount(self):
         try:
@@ -108,10 +108,11 @@ class Wallet:
             self.investment_df = investment_df
             self.total = total
 
-            print('Remaining positions:', investment_df)
-            print('Total value of assets: R$ ', total)
+            #Debug variables
+            #print('Remaining positions:', investment_df)
+            #print(f'Total Investido até {month}/{year}: R$ {total}')
 
             return total  # Return the calculated total
         except Exception as e:
             print("Error in calculateAmountAppliedUpToDate method.\nDetails: ", e)
-            return None  # Return None in case of an error
+            return None

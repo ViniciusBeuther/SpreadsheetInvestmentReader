@@ -12,10 +12,14 @@ class Dividends:
     def getDf(self):
         return print(self.excel)
     
+    def getTotalDividends(self):
+        return self.excel['Valor líquido'].sum()
+    
     def getDividendFromYearAndMonth(self, month, year):
         if 'Ano' in self.excel.columns and 'Mês' in self.excel.columns:
             rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month)] 
             print('Total: R$ ', rows['Valor líquido'].sum())
+            totalRepeit
         else:
             print(f"'Year' or 'Month' column not found in DataFrame.")
 
