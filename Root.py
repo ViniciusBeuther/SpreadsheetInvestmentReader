@@ -60,7 +60,9 @@ while True:
                 totalUpToSelectedMonth = wallet.calculateAmountAppliedUpToDate(monthSelected, currentYear)
                 dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
 
-                print(f'Rendimento de {monthSelected}: { (totalUpToSelectedMonth / dividendsReceiptInMonthSelected).round(2)}')
+                print('total recebido: ', totalUpToSelectedMonth)
+                print('total recebido de div: ', dividendsReceiptInMonthSelected)
+                print(f'Rendimento de {monthSelected}: { ((dividendsReceiptInMonthSelected * 100) / totalUpToSelectedMonth).round(2)}')
                 break
 
 
