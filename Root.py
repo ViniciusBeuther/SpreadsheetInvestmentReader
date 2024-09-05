@@ -65,6 +65,8 @@ while True:
                 print(f'Rendimento de {monthSelected}: { ((dividendsReceiptInMonthSelected * 100) / totalUpToSelectedMonth).round(2)}')
                 break
 
+    elif option == 6:
+        wallet.getDistribution()
 
     else:
         print('Opção Inválida')

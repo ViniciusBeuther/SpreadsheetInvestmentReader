@@ -1,6 +1,8 @@
 import pandas as pd
 from Dividends import Dividends
 
+fiiListPath = '../assets/fundosImobiliariosListadosNaB3.csv'
+
 class Wallet:
     df = None
     investment_df = None
@@ -116,3 +118,9 @@ class Wallet:
         except Exception as e:
             print("Error in calculateAmountAppliedUpToDate method.\nDetails: ", e)
             return None
+
+    def getDistribution(self):
+        stockList = []
+        fiiList = pd.read_excel( fiiListPath )
+        print(fiiList)
+        pass
