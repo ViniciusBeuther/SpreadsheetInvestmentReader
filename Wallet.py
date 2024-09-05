@@ -27,7 +27,7 @@ class Wallet:
         return self.dividends.getTotalDividends()
 
     def calculateAmount(self):
-        try:
+        try: 
             # Save all transaction bought and sold
             sold = self.df[self.df['Tipo de Movimentação'] == 'Venda']
             bought = self.df[self.df['Tipo de Movimentação'] == 'Compra']
