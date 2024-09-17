@@ -156,3 +156,4 @@ df = Dividends(dividendsXLS, transactionsXLS)
 #df.resumeProduct()
 #df.getDividendFromYearAndMonth(2024, 6) 
 df.totalOfDividendsReceipt()
+

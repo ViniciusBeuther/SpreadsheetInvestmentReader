@@ -86,7 +86,7 @@ class Wallet:
             boughtGrouped['Preço Médio'] = avg_bought
             soldGrouped['Preço Médio'] = avg_sold
 
-            # Merge both DataFrames to ensure all negotiation codes are included
+            # Merge both DataFrames to ensure all negotiation codes are included.
             investment_df = pd.merge(boughtGrouped, soldGrouped, on='Código de Negociação', how='outer', suffixes=('_buy', '_sell'))
 
             # Fill NaN values with 0 for subtraction
@@ -121,6 +121,6 @@ class Wallet:
 
     def getDistribution(self):
         stockList = []
-        fiiList = pd.read_excel( fiiListPath )
+        fiiList = pd.read_csv( fiiListPath )
         print(fiiList)
         pass
