@@ -25,9 +25,9 @@ class Dividends:
         else:
             print(f"'Year' or 'Month' column not found in DataFrame.")
 
-    def getDividendFromYearAndMonthExceptForTreasure(self, month, year):
+    def getDividendFromYearAndMonth(self, month, year):
         if 'Ano' in self.excel.columns and 'Mês' in self.excel.columns:
-            rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month) & (not self.excel['Ativo'].str.contains('Tesouro'))] 
+            rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month)] 
             print('Total: R$ ', rows['Valor líquido'].sum())
             totalReceipt = rows['Valor líquido'].sum()   
             return totalReceipt

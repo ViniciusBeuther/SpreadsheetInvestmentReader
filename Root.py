@@ -57,9 +57,9 @@ while True:
             if monthSelected == 0:
                 break
             else:
-                totalUpToSelectedMonth = wallet.calculateAmountAppliedUpToDate(monthSelected, currentYear)
+                totalUpToSelectedMonth = wallet.calculateAmountAppliedUpToDateExceptTreasure(monthSelected, currentYear)
                 #dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
-                dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonthExceptForTreasure(monthSelected, currentYear)
+                dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
 
                 print('total investido até o Mês: ', totalUpToSelectedMonth)
                 print('total recebido de div no mês: ', dividendsReceiptInMonthSelected)
