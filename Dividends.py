@@ -29,8 +29,7 @@ class Dividends:
         if 'Ano' in self.excel.columns and 'Mês' in self.excel.columns:
             rows = self.excel[(self.excel['Ano'] == year) & (self.excel['Mês'] == month) & (not self.excel['Ativo'].str.contains('Tesouro'))] 
             print('Total: R$ ', rows['Valor líquido'].sum())
-            totalReceipt = rows['Valor líquido'].sum()
-
+            totalReceipt = rows['Valor líquido'].sum()   
             return totalReceipt
         else:
             print(f"'Year' or 'Month' column not found in DataFrame.")
