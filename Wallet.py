@@ -115,7 +115,7 @@ class Wallet:
             #print('Remaining positions:', investment_df)
             #print(f'Total Investido até {month}/{year}: R$ {total}')
 
-            return total  # Return the calculated total
+            return total 
         except Exception as e:
             print("Error in calculateAmountAppliedUpToDate method.\nDetails: ", e)
             return None
