@@ -111,6 +111,7 @@ class Wallet:
             self.investment_df = investment_df
             self.total = total
 
+
             #Debug variables
             #print('Remaining positions:', investment_df)
             #print(f'Total Investido até {month}/{year}: R$ {total}')
