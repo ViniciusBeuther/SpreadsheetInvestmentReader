@@ -1,5 +1,7 @@
 import pandas as pd
 from Dividends import Dividends
+from FIIs import FIIs
+from Stock import Stock
 import re
 
 fiiListPath = '../assets/fundosImobiliariosListadosNaB3.csv'
@@ -63,6 +65,33 @@ class Wallet:
             self.investment_df = self.investment_df[['Código de Negociação', 'Quantidade', 'Valor', 'Preço Médio']]
             self.total = self.investment_df['Valor'].sum()
 
+            if 'Tipo' not in self.investment_df.columns:
+                self.investment_df['Tipo'] = None  # Manually create the column to insert the asset's type
+
+            listOfFiis = FIIs().get()
+            listOfStock = Stock().get()
+            
+            # loop thru the investiment_df and get the asset code and compare with other spreadsheets to check which type it is
+            for index, row in self.investment_df.iterrows():
+                simpleCode = row['Código de Negociação'][:4] 
+                stockCode = row['Código de Negociação']
+                
+                if len(row['Código de Negociação']) >= 6:
+                    if row['Código de Negociação'][4:7] == '11F':
+                        stockCode = row['Código de Negociação'][:6]
+                    
+                    elif bool(re.search('[0-9]+F' , row['Código de Negociação'][4:7])):
+                        stockCode = row['Código de Negociação'][:5]
+                        
+                    elif bool(re.search('.*Tesouro.*' , row['Código de Negociação'])):
+                        self.investment_df.at[index, 'Tipo'] = 'Tesouro Direto'
+
+                #  Verify if 'simple code' is in listofFiis
+                if simpleCode in listOfFiis:
+                    self.investment_df.at[index, 'Tipo'] = 'FII'
+                elif stockCode in listOfStock:
+                    self.investment_df.at[index, 'Tipo'] = 'Ação'
+                    
         except Exception as e:
             print(f'Erro: Não foi possível calcular o patrimônio. {e}')
 
@@ -176,9 +205,3 @@ class Wallet:
         except Exception as e:
             print("Error in calculateAmountAppliedUpToDate method.\nDetails: ", e)
             return None
-
-    def getDistribution(self):
-        stockList = []
-        fiiList = pd.read_csv( fiiListPath )
-        print(fiiList)
-        pass
