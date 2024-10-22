@@ -2,6 +2,7 @@ import pandas as pd
 from Dividends import Dividends
 from FIIs import FIIs
 from Stock import Stock
+from Fiagro import Fiagro
 import re
 
 fiiListPath = '../assets/fundosImobiliariosListadosNaB3.csv'
@@ -70,6 +71,7 @@ class Wallet:
 
             listOfFiis = FIIs().get()
             listOfStock = Stock().get()
+            listOfFiagro = Fiagro().get()
             
             # loop thru the investiment_df and get the asset code and compare with other spreadsheets to check which type it is
             for index, row in self.investment_df.iterrows():
@@ -91,6 +93,9 @@ class Wallet:
                     self.investment_df.at[index, 'Tipo'] = 'FII'
                 elif stockCode in listOfStock:
                     self.investment_df.at[index, 'Tipo'] = 'Ação'
+                elif stockCode in listOfFiagro or simpleCode in listOfFiagro:
+                    self.investment_df.at[index, 'Tipo'] = 'FIAGRO'
+
                     
         except Exception as e:
             print(f'Erro: Não foi possível calcular o patrimônio. {e}')
