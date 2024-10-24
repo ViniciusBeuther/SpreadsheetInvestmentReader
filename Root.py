@@ -71,3 +71,5 @@ while True:
 
     else:
         print('Opção Inválida')
+
+    print('Press enter to finish')

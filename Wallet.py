@@ -12,6 +12,9 @@ class Wallet:
     investment_df = None
     dividends = None
     total = None
+    stockTupleList = []
+    fiagroTupleList = []
+    fiiTupleList = []
 
     def __init__(self, transactionFile, dividendTransactions):
         self.df = pd.read_excel(transactionFile)
@@ -210,3 +213,42 @@ class Wallet:
         except Exception as e:
             print("Error in calculateAmountAppliedUpToDate method.\nDetails: ", e)
             return None
+
+    def getDistribution(self):
+        total = 0
+        tempTable = self.investment_df[['Código de Negociação', 'Tipo', 'Valor']]
+        self.fiiTupleList = []
+        self.stockTupleList = []
+        self.fiagroTupleList = []
+        self.tesouroTupleList = []
+        totalFii = 0
+        totalFiagro = 0
+        totalStock = 0
+        totalTesouro = 0
+        # (code, amount)
+    
+        for index, row in tempTable.iterrows():
+            if row['Tipo'] == 'FII':
+                self.fiiTupleList.append((row['Código de Negociação'], row['Valor']))
+
+            elif row['Tipo'] == 'FIAGRO':
+                self.fiagroTupleList.append((row['Código de Negociação'], row['Valor']))
+                
+            elif row['Tipo'] == 'Ação':
+                self.stockTupleList.append((row['Código de Negociação'], row['Valor']))
+            elif row['Tipo'] == 'Tesouro Direto':
+                self.tesouroTupleList.append((row['Código de Negociação'], row['Valor']))
+
+        for i in self.fiiTupleList:
+            totalFii += i[1]
+        for i in self.fiagroTupleList:
+            totalFiagro += i[1]
+        for i in self.stockTupleList:
+            totalStock += i[1]
+
+        print('Total em ações: R$ ', ((100 * totalStock) / self.total) * 100)
+        print('Total em Fundos Imobiliários: R$ ', ((100 * totalFii) / self.total) * 100)
+        print('Total em Fiagro: R$ ', ((100 * totalFiagro) / self.total) * 100)
+        print('Total no Tesouro Direto: R$ ', ((100 * totalTesouro) / self.total) * 100)
+        
+        
