@@ -16,5 +16,5 @@ class FIIs:
     for i in self.listFile:
       self.list.append(i)
 
-fii = FIIs()
+## fii = FIIs()
 ## print(fii.get())

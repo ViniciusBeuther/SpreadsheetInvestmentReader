@@ -14,6 +14,7 @@ while True:
     print('3- Ver dividendos totais')
     print('4- Ver dividendos de um mês específico')
     print('5- Ver rentabilidade mensal')
+    print('6- Ver distribuição de carteira')
     print('9- Sair')
 
     option = int(input('Opção Desejada: '))
@@ -67,9 +68,8 @@ while True:
                 break
 
     elif option == 6:
+        print('\n\n\n\n\n\n')
         wallet.getDistribution()
 
     else:
         print('Opção Inválida')
-
-    print('Press enter to finish')

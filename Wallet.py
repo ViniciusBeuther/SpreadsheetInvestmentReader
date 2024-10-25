@@ -215,7 +215,6 @@ class Wallet:
             return None
 
     def getDistribution(self):
-        total = 0
         tempTable = self.investment_df[['Código de Negociação', 'Tipo', 'Valor']]
         self.fiiTupleList = []
         self.stockTupleList = []
@@ -245,10 +244,14 @@ class Wallet:
             totalFiagro += i[1]
         for i in self.stockTupleList:
             totalStock += i[1]
+        for i in self.tesouroTupleList:
+            totalTesouro += i[1]
 
-        print('Total em ações: R$ ', ((100 * totalStock) / self.total) * 100)
-        print('Total em Fundos Imobiliários: R$ ', ((100 * totalFii) / self.total) * 100)
-        print('Total em Fiagro: R$ ', ((100 * totalFiagro) / self.total) * 100)
-        print('Total no Tesouro Direto: R$ ', ((100 * totalTesouro) / self.total) * 100)
+        print('=-=-=-=-=-=-=-=-=-= DISTRIBUIÇÃO DE ATIVOS =-=-=-=-=-=-=-=-=-=')
+        print(f'Total em ações: {((100 * totalStock) / self.total):.2f} % ($ {totalStock:.2f})')
+        print(f'Total em Fundos Imobiliários: {((100 * totalFii) / self.total):.2f} % ($ {totalFii:.2f})')
+        print(f'Total em Fiagro: {((100 * totalFiagro) / self.total):.2f} % ($ {totalFiagro:.2f})')
+        print(f'Total no Tesouro Direto: {((100 * totalTesouro) / self.total):.2f} % ($ {totalTesouro:.2f})')
+        print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n\n')
         
         
