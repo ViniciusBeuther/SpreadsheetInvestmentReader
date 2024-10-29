@@ -9,6 +9,7 @@ dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Con
 # Initialize and read investments spreadsheet
 myWallet = Wallet(transactionFile, dividendTransactions)
 
+
 app = FastAPI()
 
 # setup CORS configuration
