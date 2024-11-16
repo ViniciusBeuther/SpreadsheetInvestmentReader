@@ -72,4 +72,4 @@ while True:
         wallet.getDistribution()
 
     else:
-        print('Opção Inválida')
+        print('Opção Inválida, tente novamente')
