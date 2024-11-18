@@ -5,7 +5,7 @@ transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle
 dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
 
 wallet = Wallet(transactionFile, dividendTransactions)
-#wallet.initialize()
+# wallet.initialize()
 
 while True:
     print('=-=-=-=-=-=-=-=-=-= CENTRAL DE INVESTIMENTOS =-=-=-=-=-=-=-=-=-=')
@@ -42,7 +42,7 @@ while True:
     elif option == 4:
         clearTerminal()
 
-        #call a function to get the month selected
+        # call a function to get the month selected
         monthSelected = chooseMonth()
         
         try:
@@ -59,7 +59,7 @@ while True:
                 break
             else:
                 totalUpToSelectedMonth = wallet.calculateAmountAppliedUpToDateExceptTreasure(monthSelected, currentYear)
-                #dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
+                # dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
                 dividendsReceiptInMonthSelected = wallet.dividends.getDividendFromYearAndMonth(monthSelected, currentYear)
 
                 print('total investido até o Mês: ', totalUpToSelectedMonth)
