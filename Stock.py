@@ -1,6 +1,6 @@
 import pandas as pd
+from Files import StockPath
 
-excelPath = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Acoes.xlsx'
 
 class Stock:
   list = []
@@ -13,7 +13,7 @@ class Stock:
     return self.list
 
   def initialize(self):
-    self.listFile = pd.read_excel(excelPath)['Cod']
+    self.listFile = pd.read_excel(StockPath)['Cod']
     
     for stockCode in self.listFile:
       self.list.append(stockCode)

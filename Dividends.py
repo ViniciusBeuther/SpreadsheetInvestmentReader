@@ -1,4 +1,5 @@
 import pandas as pd
+from Files import DividendsList
 
 class Dividends:
     excel = None
@@ -46,7 +47,7 @@ class Dividends:
 
     def getDividendsByYear(self, year):
         try:
-            df = pd.read_excel('C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx')
+            df = pd.read_excel(DividendsList)
             # Filter by year provided in DF 
             df_year = df[df['Ano'] == year]
             df_year['Código'] = df_year['Produto'].str.split(' - ').str[0]
@@ -70,7 +71,7 @@ class Dividends:
 
     def getDividendsByYearAndType(self, year):
         try:
-            df = pd.read_excel('C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx')
+            df = pd.read_excel(DividendsList)
             df_year = df[df['Ano'] == year].copy()
 
             # Get the asset code

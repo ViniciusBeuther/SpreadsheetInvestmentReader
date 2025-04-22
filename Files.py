@@ -1,0 +1,5 @@
+StockPath = './assets/Acoes.xlsx'
+FiiList = './assets/fundosImobiliariosListadosNaB3.xlsx'
+TransactionsList = './assets/Negociações.xlsx'
+DividendsList = './assets/Dividendos Recebidos.xlsx'
+FiiAgroList = './assets/FIAGRO.xlsx'

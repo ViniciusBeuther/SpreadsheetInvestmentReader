@@ -2,9 +2,11 @@ from fastapi import FastAPI
 import pandas as pd
 from Wallet import Wallet
 from fastapi.middleware.cors import CORSMiddleware
+from Files import TransactionsList, DividendsList
+
 # file paths
-transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets//Negociações.xlsx'
-dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
+transactionFile = TransactionsList
+dividendTransactions = DividendsList
 
 # Initialize and read investments spreadsheet
 myWallet = Wallet(transactionFile, dividendTransactions)

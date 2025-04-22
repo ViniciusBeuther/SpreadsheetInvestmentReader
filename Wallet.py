@@ -4,8 +4,10 @@ from FIIs import FIIs
 from Stock import Stock
 from Fiagro import Fiagro
 import re
+from Files import FiiList
 
-fiiListPath = '../assets/fundosImobiliariosListadosNaB3.csv'
+# fiiListPath = '/Users/viniciusbeuther/Documents/Development/Personal/SpreadsheetInvestmentReader/assets/fundosImobiliariosListadosNaB3.xlsx'
+fiiListPath = FiiList
 
 class Wallet:
     df = None

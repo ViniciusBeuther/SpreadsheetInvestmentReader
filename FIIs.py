@@ -1,6 +1,7 @@
 import pandas as pd
+from Files import FiiList
 
-excelPath = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/fundosImobiliariosListadosNaB3.xlsx'
+# excelPath = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/fundosImobiliariosListadosNaB3.xlsx'
 
 class FIIs:
   list = []
@@ -12,7 +13,7 @@ class FIIs:
     return self.list
 
   def initialize(self):
-    self.listFile = pd.read_excel(excelPath)['Código']
+    self.listFile = pd.read_excel(FiiList)['Código']
     for i in self.listFile:
       self.list.append(i)
 

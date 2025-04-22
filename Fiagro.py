@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+from Files import FiiAgroList
 
-excelPath = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/FIAGRO.xlsx'
+# excelPath = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/FIAGRO.xlsx'
 
 class Fiagro:
   list = []
@@ -9,7 +11,7 @@ class Fiagro:
     self.initialize()
 
   def initialize(self):
-    self.listFile = pd.read_excel(excelPath)['Cod']
+    self.listFile = pd.read_excel(FiiAgroList)['Cod']
     for asset in self.listFile:
       self.list.append(asset)
 

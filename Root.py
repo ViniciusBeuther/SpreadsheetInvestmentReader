@@ -1,8 +1,11 @@
 from Wallet import Wallet
 from GlobalFunctions import chooseMonth, clearTerminal
+import os
 
-transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets//Negociações.xlsx'
-dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
+# transactionFile = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets//Negociações.xlsx'
+transactionFile = '/Users/viniciusbeuther/Documents/Development/Personal/SpreadsheetInvestmentReader/assets/Negociações.xlsx'
+# dividendTransactions = 'C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx'
+dividendTransactions = '/Users/viniciusbeuther/Documents/Development/Personal/SpreadsheetInvestmentReader/assets/Dividendos Recebidos.xlsx'
 
 wallet = Wallet(transactionFile, dividendTransactions)
 # wallet.initialize()
