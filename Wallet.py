@@ -36,72 +36,84 @@ class Wallet:
         return self.dividends.getTotalDividends()
 
     def calculateAmount(self):
-        try: 
-            # Save all transaction bought and sold
-            sold = self.df[self.df['Tipo de Movimentação'] == 'Venda']
-            bought = self.df[self.df['Tipo de Movimentação'] == 'Compra']
+        try:
+            # Ensure the date is in datetime format and sort by it
+            self.df['Data do Negócio'] = pd.to_datetime(self.df['Data do Negócio'], dayfirst=True)
+            self.df.sort_values(by='Data do Negócio', inplace=True)
 
-            # Group them by negotiation code, summing the quantity and value
-            soldGrouped = sold.groupby('Código de Negociação')[['Quantidade', 'Valor']].sum().reset_index()
-            boughtGrouped = bought.groupby('Código de Negociação')[['Quantidade', 'Valor']].sum().reset_index()
+            result_assets = []
 
-            # Calculate the average price and insert it into the data frame
-            avg = (boughtGrouped['Valor'] / boughtGrouped['Quantidade']).round(2)
-            avgSold = (soldGrouped['Valor'] / soldGrouped['Quantidade']).round(2)
+            for code in self.df['Código de Negociação'].unique():
+                asset_df = self.df[self.df['Código de Negociação'] == code].copy()
+                portfolio = []  # each item will be a tuple: (quantity, total_value)
 
-            # Insert the individual average price in both df
-            boughtGrouped['Preço Médio'] = avg
-            soldGrouped['Preço Médio'] = avgSold
+                for _, row in asset_df.iterrows():
+                    movement_type = row['Tipo de Movimentação']
+                    quantity = row['Quantidade']
+                    value = row['Valor']
 
-            # Merge both DataFrames to ensure all negotiation codes are included
-            self.investment_df = pd.merge(boughtGrouped, soldGrouped, on='Código de Negociação', how='outer', suffixes=('_buy', '_sell'))
+                    if movement_type == 'Compra':
+                        portfolio.append((quantity, value))
+                    elif movement_type == 'Venda':
+                        quantity_to_sell = quantity
+                        while quantity_to_sell > 0 and portfolio:
+                            lot_quantity, lot_value = portfolio[0]
+                            if lot_quantity <= quantity_to_sell:
+                                quantity_to_sell -= lot_quantity
+                                portfolio.pop(0)
+                            else:
+                                # Sell part of the lot
+                                remaining_ratio = (lot_quantity - quantity_to_sell) / lot_quantity
+                                new_value = lot_value * remaining_ratio
+                                portfolio[0] = (lot_quantity - quantity_to_sell, new_value)
+                                quantity_to_sell = 0
 
-            # Fill NaN values with 0 for subtraction
-            self.investment_df.fillna(0, inplace=True)
+                total_quantity = sum(l[0] for l in portfolio)
+                total_value = sum(l[1] for l in portfolio)
+                average_price = round(total_value / total_quantity, 2) if total_quantity > 0 else 0
 
-            # Calculate net quantity and value
-            self.investment_df['Quantidade'] = self.investment_df['Quantidade_buy'] - self.investment_df['Quantidade_sell']
-            self.investment_df['Valor'] = self.investment_df['Valor_buy'] - self.investment_df['Valor_sell']
-            self.investment_df['Preço Médio'] = self.investment_df['Preço Médio_buy']
+                if total_quantity > 0:
+                    result_assets.append({
+                        'Código de Negociação': code,
+                        'Quantidade': total_quantity,
+                        'Valor': round(total_value, 2),
+                        'Preço Médio': average_price
+                    })
 
-            # Drop unnecessary columns
-            self.investment_df = self.investment_df[self.investment_df['Quantidade'] != 0]
-            self.investment_df = self.investment_df[['Código de Negociação', 'Quantidade', 'Valor', 'Preço Médio']]
+            self.investment_df = pd.DataFrame(result_assets)
             self.total = self.investment_df['Valor'].sum()
 
+            # Add "Tipo" column if it doesn't exist
             if 'Tipo' not in self.investment_df.columns:
-                self.investment_df['Tipo'] = None  # Manually create the column to insert the asset's type
+                self.investment_df['Tipo'] = None
 
-            listOfFiis = FIIs().get()
-            listOfStock = Stock().get()
-            listOfFiagro = Fiagro().get()
-            
-            # loop thru the investiment_df and get the asset code and compare with other spreadsheets to check which type it is
+            list_of_fiis = FIIs().get()
+            list_of_stocks = Stock().get()
+            list_of_fiagro = Fiagro().get()
+
             for index, row in self.investment_df.iterrows():
-                simpleCode = row['Código de Negociação'][:4] 
-                stockCode = row['Código de Negociação']
-                
+                simple_code = row['Código de Negociação'][:4]
+                stock_code = row['Código de Negociação']
+
                 if len(row['Código de Negociação']) >= 6:
                     if row['Código de Negociação'][4:7] == '11F':
-                        stockCode = row['Código de Negociação'][:6]
-                    
-                    elif bool(re.search('[0-9]+F' , row['Código de Negociação'][4:7])):
-                        stockCode = row['Código de Negociação'][:5]
-                        
-                    elif bool(re.search('.*Tesouro.*' , row['Código de Negociação'])):
+                        stock_code = row['Código de Negociação'][:6]
+                    elif bool(re.search('[0-9]+F', row['Código de Negociação'][4:7])):
+                        stock_code = row['Código de Negociação'][:5]
+                    elif bool(re.search('.*Tesouro.*', row['Código de Negociação'])):
                         self.investment_df.at[index, 'Tipo'] = 'Tesouro Direto'
 
-                #  Verify if 'simple code' is in listofFiis
-                if simpleCode in listOfFiis:
+                if simple_code in list_of_fiis:
                     self.investment_df.at[index, 'Tipo'] = 'FII'
-                elif stockCode in listOfStock:
+                elif stock_code in list_of_stocks:
                     self.investment_df.at[index, 'Tipo'] = 'Ação'
-                elif stockCode in listOfFiagro or simpleCode in listOfFiagro:
+                elif stock_code in list_of_fiagro or simple_code in list_of_fiagro:
                     self.investment_df.at[index, 'Tipo'] = 'FIAGRO'
 
-                    
         except Exception as e:
-            print(f'Erro: Não foi possível calcular o patrimônio. {e}')
+            print(f'Error: Could not calculate the portfolio. {e}')
+
+
 
     def calculateAmountAppliedUpToDate(self, month, year):
         try:
