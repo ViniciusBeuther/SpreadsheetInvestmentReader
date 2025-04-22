@@ -73,12 +73,12 @@ while True:
         wallet.getDistribution()
 
     elif option == 7:
-        print('\n\n\n\n\n\n')
+        print('\n\n\n')
         year = int(input('Ano desejado: '))
         wallet.dividends.getDividendsByYear(year)
 
     elif option == 8:
-        print('\n\n\n\n\n\n')
+        print('\n\n\n')
         year = int(input('Ano desejado: '))
         wallet.dividends.getDividendsByYearAndType(year)
 

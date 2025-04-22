@@ -71,10 +71,10 @@ class Dividends:
     def getDividendsByYearAndType(self, year):
         try:
             df = pd.read_excel('C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx')
-            df_ano = df[df['Ano'] == year].copy()
+            df_year = df[df['Ano'] == year].copy()
 
             # Get the asset code
-            df_ano['Código'] = df_ano['Produto'].str.split(' - ').str[0]
+            df_year['Código'] = df_year['Produto'].str.split(' - ').str[0]
 
             # classify provent type
             def classify(event):
@@ -86,10 +86,10 @@ class Dividends:
                 else:
                     return 'Outro'
 
-            df_ano['Categoria'] = df_ano['Tipo de Evento'].apply(classify)
-
-            # Agrupar por Código e Categoria
-            grouped = df_ano.groupby(['Código', 'Categoria'])['Valor líquido'].sum().reset_index()
+            df_year['Categoria'] = df_year['Tipo de Evento'].apply(classify)
+            df_year.sort_values(by=['Código', 'Valor líquido'])
+            # Group by code and category
+            grouped = df_year.groupby(['Código', 'Categoria'])['Valor líquido'].sum().reset_index()
             grouped.rename(columns={'Valor líquido': 'Total'}, inplace=True)
 
             return print(grouped)
