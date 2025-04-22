@@ -42,3 +42,58 @@ class Dividends:
         
         except Exception as e:
             return print('Error: Resuming codes. Check Dividends Class')
+        
+
+    def getDividendsByYear(self, year):
+        try:
+            df = pd.read_excel('C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx')
+            # Filter by year provided in DF 
+            df_year = df[df['Ano'] == year]
+            df_year['Código'] = df_year['Produto'].str.split(' - ').str[0]
+            # print(df_year['Código'])
+
+            # Sort values by code and total received
+            df_year.sort_values(by=["Código","Valor líquido"])
+            
+            # Group by product and sum the liquid total
+            grouped = df_year.groupby('Código')['Valor líquido'].sum().reset_index()
+            
+            # Rename the column
+            grouped.rename(columns={'Valor líquido': 'Total de Proventos'}, inplace=True)
+
+            # Return a print
+            return print(grouped)
+
+        except Exception as e:
+            print(f'Erro ao calcular os proventos do ano {year}: {e}')
+            return pd.DataFrame()
+
+    def getDividendsByYearAndType(self, year):
+        try:
+            df = pd.read_excel('C:/Users/vinic/Downloads/PROJETOS DE DESENVOLVIMENTO/Controle de Rendimento/assets/Dividendos Recebidos.xlsx')
+            df_ano = df[df['Ano'] == year].copy()
+
+            # Get the asset code
+            df_ano['Código'] = df_ano['Produto'].str.split(' - ').str[0]
+
+            # classify provent type
+            def classify(event):
+                event = event.lower()
+                if 'dividendo' in event or 'rendimento' in event:
+                    return 'Dividendo/Rendimento'
+                elif 'juros' in event:
+                    return 'Juros/JCP'
+                else:
+                    return 'Outro'
+
+            df_ano['Categoria'] = df_ano['Tipo de Evento'].apply(classify)
+
+            # Agrupar por Código e Categoria
+            grouped = df_ano.groupby(['Código', 'Categoria'])['Valor líquido'].sum().reset_index()
+            grouped.rename(columns={'Valor líquido': 'Total'}, inplace=True)
+
+            return print(grouped)
+
+        except Exception as e:
+            print(f'Erro ao separar os proventos do ano {year}: {e}')
+            return pd.DataFrame()

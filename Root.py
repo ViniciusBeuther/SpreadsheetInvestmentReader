@@ -15,6 +15,7 @@ while True:
     print('4- Ver dividendos de um mês específico')
     print('5- Ver rentabilidade mensal')
     print('6- Ver distribuição de carteira')
+    print('7- Ver dividendos totais recebidos no ano')
     print('9- Sair')
 
     option = int(input('Opção Desejada: '))
@@ -70,6 +71,17 @@ while True:
     elif option == 6:
         print('\n\n\n\n\n\n')
         wallet.getDistribution()
+
+    elif option == 7:
+        print('\n\n\n\n\n\n')
+        year = int(input('Ano desejado: '))
+        wallet.dividends.getDividendsByYear(year)
+
+    elif option == 8:
+        print('\n\n\n\n\n\n')
+        year = int(input('Ano desejado: '))
+        wallet.dividends.getDividendsByYearAndType(year)
+
 
     else:
         print('Opção Inválida, tente novamente')
