@@ -47,3 +47,7 @@ def getTotals():
 @app.get('/wallet/dividends/{year}/{month}')
 def getDividendsFromPeriod(year, month):
   return myWallet.dividends.getDividendFromYearAndMonth(month, year)
+
+@app.get('/wallet/distribution')
+def getDistribution():
+  return myWallet.getDistribution()

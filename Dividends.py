@@ -82,8 +82,10 @@ class Dividends:
                 event = event.lower()
                 if 'dividendo' in event or 'rendimento' in event:
                     return 'Dividendo/Rendimento'
+                elif 'jcp' in event or 'juros sobre capital próprio' in event:
+                    return 'JCP'
                 elif 'juros' in event:
-                    return 'Juros/JCP'
+                    return 'Juros'
                 else:
                     return 'Outro'
 

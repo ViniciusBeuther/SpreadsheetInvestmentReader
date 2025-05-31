@@ -234,38 +234,62 @@ class Wallet:
         self.stockTupleList = []
         self.fiagroTupleList = []
         self.tesouroTupleList = []
+
         totalFii = 0
         totalFiagro = 0
         totalStock = 0
         totalTesouro = 0
-        # (code, amount)
-    
-        for index, row in tempTable.iterrows():
-            if row['Tipo'] == 'FII':
-                self.fiiTupleList.append((row['Código de Negociação'], row['Valor']))
 
-            elif row['Tipo'] == 'FIAGRO':
-                self.fiagroTupleList.append((row['Código de Negociação'], row['Valor']))
-                
-            elif row['Tipo'] == 'Ação':
-                self.stockTupleList.append((row['Código de Negociação'], row['Valor']))
-            elif row['Tipo'] == 'Tesouro Direto':
-                self.tesouroTupleList.append((row['Código de Negociação'], row['Valor']))
+        for _, row in tempTable.iterrows():
+            tipo = row['Tipo']
+            codigo = row['Código de Negociação']
+            valor = row['Valor']
 
-        for i in self.fiiTupleList:
-            totalFii += i[1]
-        for i in self.fiagroTupleList:
-            totalFiagro += i[1]
-        for i in self.stockTupleList:
-            totalStock += i[1]
-        for i in self.tesouroTupleList:
-            totalTesouro += i[1]
+            if tipo == 'FII':
+                self.fiiTupleList.append((codigo, valor))
+                totalFii += valor
+            elif tipo == 'FIAGRO':
+                self.fiagroTupleList.append((codigo, valor))
+                totalFiagro += valor
+            elif tipo == 'Ação':
+                self.stockTupleList.append((codigo, valor))
+                totalStock += valor
+            elif tipo == 'Tesouro Direto':
+                self.tesouroTupleList.append((codigo, valor))
+                totalTesouro += valor
 
+        # Calcular percentuais
+        stockPercent = (100 * totalStock) / self.total if self.total else 0
+        fiiPercent = (100 * totalFii) / self.total if self.total else 0
+        fiagroPercent = (100 * totalFiagro) / self.total if self.total else 0
+        tesouroPercent = (100 * totalTesouro) / self.total if self.total else 0
+
+        # Print (opcional)
         print('=-=-=-=-=-=-=-=-=-= DISTRIBUIÇÃO DE ATIVOS =-=-=-=-=-=-=-=-=-=')
-        print(f'Total em ações: {((100 * totalStock) / self.total):.2f} % ($ {totalStock:.2f})')
-        print(f'Total em Fundos Imobiliários: {((100 * totalFii) / self.total):.2f} % ($ {totalFii:.2f})')
-        print(f'Total em Fiagro: {((100 * totalFiagro) / self.total):.2f} % ($ {totalFiagro:.2f})')
-        print(f'Total no Tesouro Direto: {((100 * totalTesouro) / self.total):.2f} % ($ {totalTesouro:.2f})')
+        print(f'Total em ações: {stockPercent:.2f} % ($ {totalStock:.2f})')
+        print(f'Total em Fundos Imobiliários: {fiiPercent:.2f} % ($ {totalFii:.2f})')
+        print(f'Total em Fiagro: {fiagroPercent:.2f} % ($ {totalFiagro:.2f})')
+        print(f'Total no Tesouro Direto: {tesouroPercent:.2f} % ($ {totalTesouro:.2f})')
         print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n\n')
+
+        # Construir objeto de resposta
+        returnObj = {
+            "distribution": [
+                {"type": "acao", "total": totalStock, "percentage": stockPercent},
+                {"type": "fii", "total": totalFii, "percentage": fiiPercent},
+                {"type": "fiagro", "total": totalFiagro, "percentage": fiagroPercent},
+                {"type": "tesouro", "total": totalTesouro, "percentage": tesouroPercent},
+            ]
+        }
+        # ,
+        #     "details": {
+        #         "acao": self.stockTupleList,
+        #         "fii": self.fiiTupleList,
+        #         "fiagro": self.fiagroTupleList,
+        #         "tesouro": self.tesouroTupleList
+        #     }
+
+        return returnObj
+
         
         
